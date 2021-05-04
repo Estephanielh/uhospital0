@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Generar Factura | UHospital</title>
+    </head>
+    <form class="black form" id="invoiceForm">
+        <h1>Generar Factura</h1>
+        <br>
+        <label for="fecha">Fecha *</label><br>
+        <input type="date" id="fecha" required>
+        <br><br>
+        <label for="paciente">Paciente *</label><br>
+        <input id="paciente" required>
+        <br><br>
+        <label for="doctores" class="input">Doctor *</label><br>
+        <select id="doctores"></select>
+        <br><br>
+        <label for="consulta">Costo Consulta *</label><br>
+        <input id="consulta" required>
+        <br><br>
+        <label for="operacion">Costo Operación</label><br>
+        <input id="operacion">
+        <br><br>
+        <label for="internado">Costo Internado</label><br>
+        <input id="internado">
+        <br><br>
+        <label for="total">Costo Total *</label><br>
+        <input id="total" required>
+        <br><br>
+        <button class="largebutton" id="generateInvoice">Generar Factura</button>
+        <br><br>
+    </form>
+    <script>
+        let doctores = document.getElementById("doctores");
+        fetch("https://uhospital0.herokuapp.com/doctor")
+            .then((response) => response.json())
+            .then((data) => {
+                data.forEach((doctor) => {
+                    let opcion = document.createElement("option");
+                    opcion.className = "doctor";
+                    opcion.innerText = doctor.first_name + " " + doctor.last_name;
+                    opcion.value = doctor.nickname;
+                    console.log(opcion);
+                    doctores.append(opcion);
+                })
+            });
+        let fecha = document.getElementById("fecha");
+        let paciente = document.getElementById("paciente");
+        let doctor = document.getElementById("doctores");
+        let consulta = document.getElementById("consulta");
+        let operacion = document.getElementById("operacion");
+        let internado = document.getElementById("internado");
+        let total = document.getElementById("total");
+        let submitButton = document.getElementById("generateInvoice")
+        let invoiceForm = document.getElementById("invoiceForm");
+        invoiceForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+        submitButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            const newInvoice = {
+                date: fecha.value,
+                patient: paciente.value,
+                doctor: doctor.value,
+                price1: consulta.value,
+                price2: operacion.value,
+                price3: internado.value,
+                total_price: total.value,
+            };
+            if (newInvoice.fecha == "" || newInvoice.paciente == "" || newInvoice.doctor == "" || newInvoice.consulta == "" || newInvoice.total == "") {
+                alert("Ingresa los campos obligatorios");
+                return false;
+            }
+            console.log(newInvoice);
+            fetch("https://uhospital0.herokuapp.com/invoice", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(newInvoice),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                //    window.open(data);
+                 //   console.log("end");
+                })
+                .catch((error) => console.log(error));
+        })
+    </script>
+</body>
+
+</html>

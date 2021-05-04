@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Enfermera Dashboard | UHospital</title>
+    </head>
+    <div class="black form" id="dashboardForm">
+        <h1>Dashboard Enfermera</h1>
+        <p id="currentUser"></p>
+        <br>
+        <a href="citas pendientes.html" class="abutton largebutton buttonblack">Citas Pendientes</a>
+        <br><br>
+        <a href="citas aceptadas.html" class="abutton largebutton buttonblack">Citas Aceptadas</a>
+        <br><br>
+        <a href="generar factura.html" class="abutton largebutton buttonblack">Generar Facturas</a>
+        <br><br>
+        <a class="abutton largebutton buttonblack" id="modificarButton">Modificar Perfil</a>
+        <br><br>
+    </div>
+    <script>
+        let dashboardForm = document.getElementById("dashboardForm");
+        //getting URL parameters
+        const queryStrings = window.location.search;
+        const urlParams = new URLSearchParams(queryStrings);
+        const firstName = urlParams.get("first_name");
+        const lastName = urlParams.get("last_name");
+        const date = urlParams.get("date")
+        const gender = urlParams.get("gender")
+        const nickname = urlParams.get("nickname")
+        const password = urlParams.get("password")
+        const phone = urlParams.get("phone")
+        const type = urlParams.get("type")
+        let params ="first_name="+firstName;
+        params += "&last_name=" + lastName;
+        params += "&date=" + date;
+        params += "&gender=" + gender;
+        params += "&nickname=" + nickname;
+        params += "&password=" + password;
+        params += "&phone=" + phone;
+        params += "&type=" + type;
+        params += "&page=1"
+        let modificarButton = document.getElementById("modificarButton");
+        dashboardForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+        modificarButton.addEventListener("click", (e) => {
+            modificarButton.href = "modificar perfil nurse.html?" + params;
+        })
+        //getting inputs
+        let currentUser = document.getElementById("currentUser");
+        if (gender == "F" || gender == "f") {
+            currentUser.innerText = `¡Bienvenida, ${firstName} ${lastName}!`;
+        } else {
+            currentUser.innerText = `¡Bienvenido, ${firstName} ${lastName}!`;
+        }
+    </script>
+</body>
+
+</html>

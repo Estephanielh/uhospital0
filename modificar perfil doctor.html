@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Modificar Perfil | UHospital</title>
+    </head>
+    <form class="black form" id="dashboardForm">
+        <h1>Modificar Perfil</h1>
+        <label for="nombre">Nombre</label><br>
+        <input id="nombre">
+        <br><br>
+        <label for="apellido">Apellido</label><br>
+        <input id="apellido">
+        <br><br>
+        <label for="dob">Fecha de Nacimiento</label><br>
+        <input id="dob">
+        <br><br>
+        <label for="sexo">Sexo</label><br>
+        <input id="sexo">
+        <br><br>
+        <label for="usuario">Nombre de Usuario</label><br>
+        <input id="usuario">
+        <br><br>
+        <label for="contra">Contraseña</label><br>
+        <input id="contra" minlength="8">
+        <br><br>
+        <label for="speciality">Especialidad</label><br>
+        <input id="speciality">
+        <br><br>
+        <label for="tel">Teléfono</label><br>
+        <input id="tel">
+        <br><br><br>
+        <button class="largebutton" id="submit">Modificar Datos</button>
+    </form>
+
+    <script>
+        let dashboardForm = document.getElementById("dashboardForm");
+        let submit = document.getElementById("submit");
+        //getting URL parameters
+        const queryStrings = window.location.search;
+        const urlParams = new URLSearchParams(queryStrings);
+        const firstName = urlParams.get("first_name");
+        const lastName = urlParams.get("last_name");
+        const date = urlParams.get("date");
+        const gender = urlParams.get("gender");
+        const nickname = urlParams.get("nickname");
+        const password = urlParams.get("password");
+        const speciality = urlParams.get("speciality");
+        const phone = urlParams.get("phone");
+        const type = urlParams.get("type");
+        const page = urlParams.get("page");
+        let params = firstName;
+        //getting inputs
+        let nombre = document.getElementById("nombre");
+        let apellido = document.getElementById("apellido");
+        let dob = document.getElementById("dob");
+        let sexo = document.getElementById("sexo");
+        let usuario = document.getElementById("usuario");
+        let contra = document.getElementById("contra");
+        let especialidad = document.getElementById("speciality");
+        let tel = document.getElementById("tel");
+        nombre.value = firstName;
+        apellido.value = lastName;
+        dob.value = date;
+        sexo.value = gender;
+        usuario.value = nickname;
+        contra.value = password;
+        especialidad.value = speciality;
+        tel.value = phone;
+        dashboardForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+        submit.addEventListener("click", () => {
+            if (contra.value.length < 8) {
+                alert("Contraseña menor a 8 caracteres");
+                return false;
+            }
+            const values = {
+                first_name: nombre.value,
+                last_name: apellido.value,
+                date: dob.value,
+                gender: sexo.value,
+                nickname: nickname,
+                newNickname: usuario.value,
+                password: contra.value,
+                speciality: especialidad.value,
+                phone: tel.value
+            };
+            console.log(values);
+            fetch("https://uhospital0.herokuapp.com/doctor", {
+                method: "PUT",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(values),
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    let params = "first_name=" + values.first_name;
+                    params += "&last_name=" + values.last_name;
+                    params += "&date=" + values.date;
+                    params += "&gender=" + values.gender;
+                    params += "&nickname=" + values.newNickname;
+                    params += "&password=" + values.password;
+                    params += "&speciality=" + values.speciality;
+                    params += "&phone=" + values.phone;
+                    params += "&type=" + type;
+                    if (page == 0) {
+                        location.href = document.referrer;
+                    } else {
+                        console.log("final " + params);
+                        location.href = "dashboard doctor.html?" + params;
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                    console.error(error);
+                    return false;
+                })
+        });
+    </script>
+</body>
+
+</html>

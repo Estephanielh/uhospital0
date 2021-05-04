@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Iniciar Sesión | UHospital</title>
+    </head>
+    <form class="black form" id="loginForm">
+        <h1>Inicio de Sesión</h1>
+        <br>
+        <label for="nombre">Nombre de Usuario</label><br>
+        <input id="nombre">
+        <br><br><br>
+        <label for="contra">Contraseña</label><br>
+        <input type="password" id="contra">
+        <br><br><br>
+        <button class="largebutton" id="loginButton">Iniciar Sesión</button>
+        <br><br>
+        <p>¿No tienes una cuenta?</p>
+        <a href="registro.html" class="abutton buttonblack" style="width: 93%;">Crear Cuenta</a>
+    </form>
+    <script>
+        let loginForm = document.getElementById("loginForm");
+        let loginNickname = document.getElementById("nombre");
+        let loginPassword = document.getElementById("contra");
+        let loginButton = document.getElementById("loginButton");
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+        loginButton.addEventListener("click", (e) => {
+            const credentials = {
+                nickname: loginNickname.value,
+                password: loginPassword.value,
+            };
+            console.log(credentials);
+            fetch("https://uhospital0.herokuapp.com/login", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(credentials),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.message) {
+                        console.error(data);
+                        alert("Credenciales Incorrectos")
+                    } else {
+                        let params = `first_name=${data.first_name}`;
+                        params += `&last_name=${data.last_name}`;
+                        params += `&date=${data.date}`;
+                        params += `&gender=${data.gender}`;
+                        params += `&nickname=${data.nickname}`;
+                        params += `&password=${data.password}`;
+                        params += `&phone=${data.phone}`;
+                        params += `&type=${data.type}`;
+                        if (data.type == 0) {
+                            params += `&speciality=${data.speciality}`;
+                            window.location = "dashboard doctor.html?" + params;
+                        } else if (data.type == 1) {
+                            window.location = "dashboard nurse.html?" + params;
+                        } else if (data.type == 3) {
+                            window.location = "dashboard admin.html?" + params;
+                        } else {
+                            window.location = "dashboard paciente.html?" + params;
+                        }
+
+                    }
+                })
+                .catch((error) => console.error(error));
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Ver Perfil | UHospital</title>
+    </head>
+    <form class="black form" id="dashboardForm" style="text-align: center;">
+        <h1>Ver Perfil</h1>
+        <p id="nombre"></p>
+        <p id="apellido"></p>
+        <p id="dob"></p>
+        <p id="sexo"></p>
+        <p id="usuario"></p>
+        <p id="contra"></p>
+        <p id="tel"></p>
+    </form>
+
+    <script>
+        let dashboardForm = document.getElementById("dashboardForm");
+        //getting URL parameters
+        const queryStrings = window.location.search;
+        const urlParams = new URLSearchParams(queryStrings);
+        const firstName = urlParams.get("first_name");
+        const lastName = urlParams.get("last_name");
+        const date = urlParams.get("date")
+        const gender = urlParams.get("gender")
+        const nickname = urlParams.get("nickname")
+        const password = urlParams.get("password")
+        const speciality = urlParams.get("speciality")
+        const phone = urlParams.get("phone")
+        const type = urlParams.get("type")
+        let params = firstName;
+        //getting inputs
+        let nombre = document.getElementById("nombre");
+        let apellido = document.getElementById("apellido");
+        let dob = document.getElementById("dob");
+        let sexo = document.getElementById("sexo");
+        let usuario = document.getElementById("usuario");
+        let contra = document.getElementById("contra");
+        let tel = document.getElementById("tel");
+        nombre.innerText = "Nombre: "+firstName;
+        apellido.innerText = "Apellido: "+lastName;
+        dob.innerText = "Fecha de Nacimiento: "+date;
+        sexo.innerText = "Sexo: "+gender;
+        usuario.innerText = "Usuario: "+nickname;
+        contra.innerText = "Contraseña: "+password;
+        tel.innerText = "Teléfono: "+phone;
+    </script>
+</body>
+
+</html>

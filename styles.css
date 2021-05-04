@@ -1,0 +1,230 @@
+body {
+    text-align: center;
+    color: white;
+    font-family: Verdana;
+    background-color: #293039;
+    margin: 0px;
+    font-size: 18px;
+    text-align: justify;
+}
+
+.black {
+    background-color: #293039;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.blue {
+    background-color: #0c8c9c;
+    color: black;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.topnav {
+    background-color: #293039;
+    overflow: hidden;
+    padding-top: 10px;
+    float: right;
+}
+
+button {
+    padding: 20px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    background-color: #0c8c9c;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: Verdana;
+}
+
+.abutton {
+    padding: 20px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    background-color: #0c8c9c;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+}
+
+button:hover {
+    background-color: white;
+    color: #0c8c9c;
+}
+
+.buttonblue {
+    padding: 20px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+    color: #0c8c9c;
+    width: 250px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: Verdana;
+}
+
+.buttonblue:hover {
+    background-color: #293039;
+    color: white;
+}
+
+.buttonblack {
+    padding: 20px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    background-color: #0c8c9c;
+    color: white;
+    width: 250px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: Verdana;
+}
+
+.buttonblack:hover {
+    background-color: white;
+    color: #0c8c9c;
+}
+
+.largebutton {
+    width: 100%;
+}
+
+.medicinebutton {
+    width: 100%;
+    height: 60px;
+    padding: 7px;
+    float: right;
+}
+
+.medicinetablebutton{
+    width: 70%;
+    height: 30px;
+    padding: 4px;
+    margin: auto;
+    font-size: 16px;
+}
+
+.form {
+    padding-left: 35%;
+    padding-right: 35%;
+}
+
+input {
+    margin-top: 15px;
+    width: 100%;
+    height: 30px;
+}
+
+.shortinput {
+    margin-top: 15px;
+    width: 250px;
+    height: 30px;
+}
+
+.shopping {
+    width: 30%;
+    padding: 10px;
+    display: inline-block;
+}
+
+.shoppingprice {
+    padding-top: 0px;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    line-height: 5px;
+    font-size: 20px;
+}
+
+.shoppingquantity{
+    font-size: 12px;
+    text-align: right;
+    padding-right: 7%;
+}
+
+table,
+th,
+td,
+tr {
+    color: #c3edef;
+    border: 2px solid #0c8c9c;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+td {
+    width: 200px;
+    height: 35px;
+}
+
+.center {
+    text-align: center;
+}
+
+.tableheader {
+    font-weight: bold;
+    text-align: center;
+}
+
+.tablebutton {
+    padding: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: #0c8c9c;
+    color: white;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.tablebutton:hover{
+    background-color: white;
+    color: #0c8c9c;
+}
+
+.tableempty {
+    border: none;
+}
+
+h1 {
+    color: #c3edef;
+    text-align: center;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+}
+
+p {
+    text-align: left;
+}
+
+a {
+    color: #bfe7e7;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+}
+
+input {
+    border-radius: 5px;
+}

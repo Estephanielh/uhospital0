@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Citas Pendientes | UHospital</title>
+    </head>
+    <div class="black">
+        <h1>Citas Pendientes</h1>
+        <table style="border: none;">
+            <th style="border: none;">
+                <tr class="tableheader tableempty">
+                    <td class=" tableempty ">Fecha</td>
+                    <td class="tableempty ">Hora</td>
+                    <td class="tableempty ">Motivo</td>
+                    <td class="tableempty ">Doctor</td>
+                    <td class="tableempty "></td>
+                    <td class="tableempty "></td>
+                </tr>
+            </th>
+            <tbody style="border: none;" id="citas">
+                <tr class="tableempty center">
+                    <td class="tableempty">Fecha: asdfasdfadsf</td>
+                    <td class="tableempty">Hora: asdfasdfadsf</td>
+                    <td class="tableempty">Motivo: asdfasdfadsf</td>
+                    <td class="tableempty" style="text-align: center;">
+                        <select id="cars">
+                            <option value="volvo">Volvo</option>
+                            <option value="saab">Saab</option>
+                            <option value="opel">Opel</option>
+                            <option value="audi">Audi</option>
+                        </select>
+                    </td>
+                    <td class="tableempty"><button class="medicinebutton " style="width: 80% ">Aceptar</button></td>
+                    <td class="tableempty"><button class=medicinebutton style="width: 80% ">Rechazar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <script>
+            let citas = document.getElementById("citas");
+            //URL parameters
+            const queryStrings = window.location.search;
+            const urlParams = new URLSearchParams(queryStrings);
+            const doctorActual = urlParams.get("doctor");
+            //generar
+            getCitas();
+
+            function getCitas() {
+                fetch("https://uhospital0.herokuapp.com/appointment")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        citas.innerHTML = " ";
+                        data.forEach((appointment) => {
+                            if (appointment.status == "Pendiente") {
+                                let row = document.createElement("tr");
+                                row.className = "tableempty center";
+                                let date = document.createElement("td");
+                                date.className = "tableempty"
+                                date.innerText = appointment.date;
+                                let time = document.createElement("td");
+                                time.className = "tableempty";
+                                time.innerText = appointment.time;
+                                let description = document.createElement("td");
+                                description.innerText = appointment.description;
+                                description.className = "tableempty";
+                                let doctor = document.createElement("td");
+                                doctor.className = "tableempty";
+                                let doctores = document.createElement("select");
+                                if (doctorActual != null) {
+                                    doctor.innerText = doctorActual;
+                                    doctor.id = "doctores";
+                                } else {
+                                    doctores.className = "tableempty";
+                                    doctores.id = "doctor";
+                                    fetch("https://uhospital0.herokuapp.com/doctor")
+                                        .then((response) => response.json())
+                                        .then((newData) => {
+                                            newData.forEach((doctor) => {
+                                                let opcion = document.createElement("option");
+                                                opcion.className = "doctor";
+                                                opcion.innerText = doctor.first_name + " " + doctor.last_name;
+                                                opcion.value = doctor.nickname;
+                                                doctores.append(opcion);
+                                            })
+                                        });
+                                }
+                                let aceptar = document.createElement("td");
+                                aceptar.className = "tableempty";
+                                let aceptarButton = document.createElement("button");
+                                aceptarButton.className = "medicinetablebutton";
+                                aceptarButton.innerText = "Aceptar";
+                                aceptarButton.addEventListener("click", () => {
+                                    let doctor = document.getElementById("doctores");
+                                    let values;
+                                    if (doctorActual != null) {
+                                        values = {
+                                            patient: appointment.patient,
+                                            status: "Aceptada",
+                                            doctor: doctor.innerText
+                                        };
+                                    } else {
+                                        values = {
+                                            patient: appointment.patient,
+                                            status: "Aceptada",
+                                            doctor: doctores.value
+                                        };
+                                    }
+                                    console.log(values);
+                                    fetch("https://uhospital0.herokuapp.com/appointment", {
+                                        method: "PUT",
+                                        headers: {
+                                            "content-type": "application/json",
+                                        },
+                                        body: JSON.stringify(values),
+                                    })
+                                        .then((response) => response.json())
+                                        .then((data) => getCitas())
+                                        .catch((error) => {
+                                            console.error(error);
+                                            return false;
+                                        })
+                                })
+                                let rechazar = document.createElement("td");
+                                rechazar.className = "tableempty";
+                                let rechazarButton = document.createElement("button");
+                                rechazarButton.className = "medicinetablebutton";
+                                rechazarButton.innerText = "Rechazar";
+                                rechazarButton.addEventListener("click", () => {
+                                    const values = {
+                                        patient: appointment.patient,
+                                        status: "Rechazada",
+                                        doctor: "-"
+                                    };
+                                    console.log(values);
+                                    fetch("https://uhospital0.herokuapp.com/appointment", {
+                                        method: "PUT",
+                                        headers: {
+                                            "content-type": "application/json",
+                                        },
+                                        body: JSON.stringify(values),
+                                    })
+                                        .then((response) => response.json())
+                                        .then((data) => getCitas())
+                                        .catch((error) => {
+                                            console.error(error);
+                                            return false;
+                                        })
+                                })
+                                row.append(date);
+                                row.append(time);
+                                row.append(description);
+                                if (doctorActual == null) {
+                                    doctor.append(doctores);
+                                }
+                                row.append(doctor);
+                                aceptar.append(aceptarButton);
+                                row.append(aceptar);
+                                rechazar.append(rechazarButton);
+                                row.append(rechazar);
+                                citas.append(row);
+                            }
+                        });
+                    })
+                    .catch((error) => console.error(error));
+            }
+        </script>
+    </div>
+</body>
+
+</html>

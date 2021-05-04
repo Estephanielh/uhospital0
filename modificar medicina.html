@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Modificar Medicina | UHospital</title>
+    </head>
+    <form class="black form" id="dashboardForm">
+        <h1>Modificar Perfil</h1>
+        <label for="nombre">Nombre</label><br>
+        <input id="nombre">
+        <br><br>
+        <label for="precio">Precio</label><br>
+        <input id="precio">
+        <br><br>
+        <label for="descripcion">Descripción</label><br>
+        <textarea id="descripcion" rows="5" cols="45"></textarea>
+        <br><br>
+        <label for="cantidad">Cantidad</label><br>
+        <input id="cantidad">
+        <br><br><br>
+        <button class="largebutton" id="submit">Modificar Medicina</button>
+    </form>
+
+    <script>
+        let dashboardForm = document.getElementById("dashboardForm");
+        let submit = document.getElementById("submit");
+        //getting URL parameters
+        const queryStrings = window.location.search;
+        const urlParams = new URLSearchParams(queryStrings);
+        const name = urlParams.get("name");
+        const price = urlParams.get("price");
+        const description = urlParams.get("description")
+        const quantity = urlParams.get("quantity")
+        //getting inputs
+        let nombre = document.getElementById("nombre");
+        let precio = document.getElementById("precio");
+        let descripcion = document.getElementById("descripcion");
+        let cantidad = document.getElementById("cantidad");
+        nombre.value = name;
+        precio.value = price;
+        descripcion.value = description;
+        cantidad.value = quantity;
+        dashboardForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+        submit.addEventListener("click", () => {
+            const values = {
+                name: name,
+                newName: nombre.value,
+                price: precio.value,
+                description: descripcion.value,
+                quantity: cantidad.value
+            };
+            console.log(values);
+            fetch("https://uhospital0.herokuapp.com/medicine", {
+                method: "PUT",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(values),
+            })
+                .then((response) => response.json())
+                .catch((error) => console.error(error))
+                .then((responseJson) => {
+                    location.href = document.referrer;
+                })
+        });
+    </script>
+</body>
+
+</html>

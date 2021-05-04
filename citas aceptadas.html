@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Citas Aceptadas | UHospital</title>
+    </head>
+    <div class=black>
+        <h1>Citas Aceptadas</h1>
+        <table style="text-align: center;">
+            <caption> Visualización de citas aceptadas</caption>
+            <th>
+                <tr class="tableheader">
+                    <td>Fecha</td>
+                    <td>Hora</td>
+                    <td>Motivo</td>
+                    <td>Paciente</td>
+                    <td>Doctor</td>
+                </tr>
+            </th>
+            <tbody id="citas">
+
+            </tbody>
+    </div>
+
+    <script>
+        let citas = document.getElementById("citas");
+        //generar
+        getCitas();
+
+        function getCitas() {
+            fetch("https://uhospital0.herokuapp.com/appointment")
+                .then((response) => response.json())
+                .then((data) => {
+                    citas.innerHTML = " ";
+                    data.forEach((appointment) => {
+                        if (appointment.status == "Aceptada") {
+                            let row = document.createElement("tr");
+                            let date = document.createElement("td");
+                            date.innerText = appointment.date;
+                            let time = document.createElement("td");
+                            time.innerText = appointment.time;
+                            let description = document.createElement("td");
+                            description.innerText = appointment.description;
+                            let patient = document.createElement("td");
+                            patient.innerText = appointment.patient;
+                            let doctor = document.createElement("td");
+                            doctor.innerText = appointment.doctor;
+                            row.append(date);
+                            row.append(time);
+                            row.append(description);
+                            row.append(patient);
+                            row.append(doctor);
+                            citas.append(row);
+                        }
+                    });
+                })
+                .catch((error) => console.error(error));
+        }
+    </script>
+</body>
+
+</html>

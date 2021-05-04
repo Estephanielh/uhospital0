@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Generar Receta | UHospital</title>
+    </head>
+    <form class="black form" id="form">
+        <h1>Generar Receta</h1>
+        <br>
+        <label for="fecha">Fecha</label><br>
+        <input type="date" id="fecha">
+        <br><br>
+        <label for="paciente">Paciente</label><br>
+        <input id="paciente">
+        <br><br>
+        <label for="padecimiento">Padecimiento</label><br>
+        <input id="padecimiento">
+        <br><br>
+        <label for="descripcion">Descripción</label><br>
+        <textarea id="descripcion" style="width: 100%; height: 50px;"></textarea>
+        <br><br><br>
+        <button class="largebutton" id="submit">Generar Receta</button>
+        <br><br>
+    </form>
+</body>
+<script>
+    let form = document.getElementById("form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+    })
+    let fecha = document.getElementById("fecha");
+    let paciente = document.getElementById("paciente");
+    let padecimiento = document.getElementById("padecimiento");
+    let descripcion = document.getElementById("descripcion");
+    let submit = document.getElementById("submit");
+    submit.addEventListener("click", (e) => {
+        const values = {
+            date: fecha.value,
+            patient: paciente.value,
+            illness: padecimiento.value,
+            description: descripcion.value
+        }
+        console.log (values);
+        fetch("https://uhospital0.herokuapp.com/prescription", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(values),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                 //   window.open(data);
+                 //   console.log("end");
+                })
+                .catch((error) => console.log(error));
+    })
+</script>
+
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Carga | UHospital</title>
+    </head>
+    <div class=black>
+        <h1>Carga</h1>
+        <h2>Pacientes</h2>
+        <p style="text-align:center;">
+            <input type="file" id="filechooserPacientes" hidden><label for="filechooserPacientes"
+                class=buttonblack>Seleccionar Archivo Pacientes</label></button>
+            <button class=buttonblack id="buttonPacientes">Cargar Pacientes</button>
+        </p>
+        <h2>Médicos</h2>
+        <p style="text-align:center;">
+            <input type="file" id="filechooserMedicos" hidden><label for="filechooserMedicos"
+                class=buttonblack>Seleccionar Archivo
+                Médicos</label></button>
+            <button class=buttonblack id="buttonMedicos">Cargar Médicos</button>
+        </p>
+        <h2>Enfermeras</h2>
+        <p style="text-align:center;">
+            <input type="file" id="filechooserEnfermeras" hidden><label for="filechooserEnfermeras"
+                class=buttonblack>Seleccionar Archivo
+                Enfermeras</label></button>
+                <button class=buttonblack id="buttonEnfermeras">Cargar Enfermeras</button>
+        </p>
+        <h2>Medicamentos</h2>
+        <p style="text-align:center;">
+            <input type="file" id="filechooserMedicamentos" hidden><label for="filechooserMedicamentos"
+                class=buttonblack>Seleccionar Archivo
+                Medicamentos</label></button>
+                <button class=buttonblack id="buttonMedicamentos">Cargar Medicamentos</button>
+        </p>
+    </div>
+    <script>
+        let filechooserPacientes = document.getElementById("filechooserPacientes");
+        let buttonPacientes = document.getElementById("buttonPacientes");
+        let filechooserMedicos = document.getElementById("filechooserMedicos");
+        let buttonMedicos = document.getElementById("buttonMedicos");
+        let filechooserEnfermeras = document.getElementById("filechooserEnfermeras");
+        let buttonEnfermeras = document.getElementById("buttonEnfermeras");
+        let filechooserMedicamentos = document.getElementById("filechooserMedicamentos");
+        let buttonMedicamentos = document.getElementById("buttonMedicamentos");
+        //pacientes
+        buttonPacientes.addEventListener("click", () => {
+            let file = filechooserPacientes.files[0];
+            let reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => {
+                let data = reader.result;
+                let pacientes = data.split("\n");
+                pacientes = pacientes.splice(1, pacientes.length - 1);
+                pacientes.forEach((paciente) => {
+                    if (paciente !== "") {
+                        let pacienteData = paciente.split(",");
+                        const newPaciente = {
+                            first_name: pacienteData[0],
+                            last_name: pacienteData[1],
+                            date: pacienteData[2],
+                            gender: pacienteData[3],
+                            nickname: pacienteData[4],
+                            password: pacienteData[5],
+                            phone: pacienteData[6]
+                        };
+                        console.log(newPaciente);
+                        fetch("https://uhospital0.herokuapp.com/patient", {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                            },
+                            body: JSON.stringify(newPaciente),
+                        })
+                            .then((response) => response.json())
+                            .catch((error) => console.error(error));
+                    }
+                });
+            };
+            reader.onerror = () => console.error(reader.error);
+        });
+
+        //medicos
+        buttonMedicos.addEventListener("click", () => {
+            let file = filechooserMedicos.files[0];
+            let reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => {
+                let data = reader.result;
+                let medicos = data.split("\n");
+                medicos = medicos.splice(1, medicos.length - 1);
+                medicos.forEach((medico) => {
+                    if (medico !== "") {
+                        let medicosData = medico.split(",");
+                        const newMedico = {
+                            first_name: medicosData[0],
+                            last_name: medicosData[1],
+                            date: medicosData[2],
+                            gender: medicosData[3],
+                            nickname: medicosData[4],
+                            password: medicosData[5],
+                            speciality: medicosData[6],
+                            phone: medicosData[7]
+                        };
+                        console.log(newMedico);
+                        fetch("https://uhospital0.herokuapp.com/doctor", {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                            },
+                            body: JSON.stringify(newMedico),
+                        })
+                            .then((response) => response.json())
+                            .catch((error) => console.error(error));
+                    }
+                });
+            };
+            reader.onerror = () => console.error(reader.error);
+        });
+
+        //enfermeras
+        buttonEnfermeras.addEventListener("click", () => {
+            let file = filechooserEnfermeras.files[0];
+            let reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => {
+                let data = reader.result;
+                let nurses = data.split("\n");
+                nurses = nurses.splice(1, nurses.length - 1);
+                nurses.forEach((nurse) => {
+                    if (nurse !== "") {
+                        let nursesData = nurse.split(",");
+                        const newNurse = {
+                            first_name: nursesData[0],
+                            last_name: nursesData[1],
+                            date: nursesData[2],
+                            gender: nursesData[3],
+                            nickname: nursesData[4],
+                            password: nursesData[5],
+                            phone: nursesData[6]
+                        };
+                        console.log(newNurse);
+                        fetch("https://uhospital0.herokuapp.com/nurse", {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                            },
+                            body: JSON.stringify(newNurse),
+                        })
+                            .then((response) => response.json())
+                            .catch((error) => console.error(error));
+                    }
+                });
+            };
+            reader.onerror = () => console.error(reader.error);
+        });
+
+        //subir medicamentos
+        buttonMedicamentos.addEventListener("click", () => {
+            let file = filechooserMedicamentos.files[0];
+            let reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => {
+                let data = reader.result;
+                let medicines = data.split("\n");
+                medicines = medicines.splice(1, medicines.length - 1);
+                medicines.forEach((medicine) => {
+                    if (medicine !== "") {
+                        let medicineData = medicine.split(",");
+                        const newMedicine = {
+                            name: medicineData[0],
+                            price: medicineData[1],
+                            description: medicineData[2],
+                            quantity: medicineData[3],
+                        };
+                        console.log(newMedicine);
+                        fetch("https://uhospital0.herokuapp.com/medicine", {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                            },
+                            body: JSON.stringify(newMedicine),
+                        })
+                            .then((response) => response.json())
+                            .catch((error) => console.error(error));
+                    }
+                });
+            };
+            reader.onerror = () => console.error(reader.error);
+        });
+    </script>
+</body>
+
+</html>

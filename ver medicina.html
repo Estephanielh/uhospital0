@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Ver Medicina | UHospital</title>
+    </head>
+    <form class="black form" id="dashboardForm" style="text-align: center;">
+        <h1>Ver Medicina</h1>
+        <p id="nombre"></p>
+        <p id="precio"></p>
+        <p id="description"></p>
+        <p id="cantidad"></p>
+    </form>
+
+    <script>
+        let dashboardForm = document.getElementById("dashboardForm");
+        //getting URL parameters
+        const queryStrings = window.location.search;
+        const urlParams = new URLSearchParams(queryStrings);
+        const name = urlParams.get("name");
+        const price = urlParams.get("price");
+        const description = urlParams.get("description")
+        const quantity = urlParams.get("quantity")
+        //getting inputs
+        let nombre = document.getElementById("nombre");
+        let precio = document.getElementById("precio");
+        let descripcion = document.getElementById("description");
+        let cantidad = document.getElementById("cantidad");
+        nombre.innerText = "Nombre: "+ name;
+        precio.innerText = "Precio: Q"+price;
+        descripcion.innerText = "Descripción: "+description;
+        cantidad.innerText = "Cantidad: "+quantity;
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Comprar Medicina | UHospital</title>
+    </head>
+    <div class="black">
+        <h1>Comprar Medicina</h1>
+    </div>
+    <div class="black" id="medicines">
+    </div>
+
+    <script>
+        let medicines = document.getElementById("medicines");
+        //getting medicines
+        getMedicines();
+
+        function getMedicines() {
+            fetch("https://uhospital0.herokuapp.com/medicine")
+                .then((response) => response.json())
+                .then((data) => {
+                    medicines.innerHTML = " ";
+                    data.forEach((medicine) => {
+                        if (medicine.quantity > 0) {
+                            let card = document.createElement("div");
+                            card.className = "black shopping";
+                            card.id = medicine.name;
+                            let medicineName = document.createElement("h2");
+                            medicineName.innerText = medicine.name;
+                            let medicineQuantity = document.createElement("p");
+                            medicineQuantity.className = "shoppingquantity";
+                            medicineQuantity.innerText = "Cantidad: " + medicine.quantity;
+                            let medicineDescription = document.createElement("p");
+                            medicineDescription.className = "";
+                            medicineDescription.innerText = medicine.description;
+                            let medicinePrice = document.createElement("p");
+                            medicinePrice.className = "shoppingprice";
+                            medicinePrice.innerText = "Q" + medicine.price;
+                            let addToCart = document.createElement("BUTTON");
+                            addToCart.className = "medicinebutton";
+                            addToCart.innerText = "Añadir " + medicine.name + " al carrito";
+
+                            card.appendChild(medicineName);
+                            card.appendChild(medicineDescription);
+                            card.appendChild(medicinePrice);
+                            card.appendChild(medicineQuantity);
+                            card.appendChild(addToCart);
+                            medicines.appendChild(card);
+                        }
+                    });
+                })
+                .catch((error) => console.error(error));
+        }
+    </script>
+</body>
+
+</html>

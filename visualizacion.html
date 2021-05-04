@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Visualización | UHospital</title>
+    </head>
+    <div class=black>
+        <h1>Vista General</h1>
+        <h2>Doctores</h2>
+        <table style="text-align: center;">
+            <caption> Visualización de datos de Doctores</caption>
+            <th>
+                <tr class="tableheader">
+                    <td>No.</td>
+                    <td>Nombre</td>
+                    <td>Apellido</td>
+                    <td>Especialidad</td>
+                    <td>Opciones</td>
+                </tr>
+            </th>
+            <tbody id="doctores">
+                
+            </tbody>
+        </table>
+        <p style="text-align: center;"><button id="reporteDoctores">Generar Reporte en PDF</button>
+        </p>
+
+        <h2>Enfermeras</h2>
+        <table style="text-align: center;">
+            <caption> Visualización de datos de Enfermeras</caption>
+            <th>
+                <tr class="tableheader">
+                    <td>No.</td>
+                    <td>Nombre</td>
+                    <td>Apellido</td>
+                    <td>Opciones</td>
+                </tr>
+            </th>
+            <tbody id="enfermeras">
+               
+            </tbody>
+        </table>
+        <p style="text-align: center;"><button id="reporteEnfermeras">Generar Reporte en PDF</button>
+        </p>
+
+        <h2>Pacientes</h2>
+        <table style="text-align: center;">
+            <caption> Visualización de datos de Pacientes</caption>
+            <th>
+                <tr class="tableheader">
+                    <td>No.</td>
+                    <td>Nombre</td>
+                    <td>Apellido</td>
+                    <td>Opciones</td>
+                </tr>
+            </th>
+            <tbody id="pacientes">
+               
+            </tbody>
+        </table>
+        <p style="text-align: center;"><button id="reportePacientes">Generar Reporte en PDF</button>
+        </p>
+
+        <h2>Medicinas</h2>
+        <table style="text-align: center;">
+            <caption> Visualización de datos de Medicinas</caption>
+            <th>
+                <tr class="tableheader">
+                    <td>No.</td>
+                    <td>Nombre</td>
+                    <td>Precio</td>
+                    <td>Descripción</td>
+                    <td>Cantidad</td>
+                    <td>Opciones</td>
+                </tr>
+            </th>
+            <tbody id="medicinas">
+                
+            </tbody>
+        </table>
+        <p style="text-align: center;"><button id="reporteMedicinas">Generar Reporte en PDF</button>
+        </p>
+    </div>
+
+    <script>
+        let doctores = document.getElementById("doctores");
+        let enfermeras = document.getElementById("enfermeras");
+        let pacientes = document.getElementById("pacientes");
+        let medicinas = document.getElementById("medicinas");
+        let reporteDoctores = document.getElementById("reporteDoctores");
+        let reporteEnfermeras = document.getElementById("reporteEnfermeras");
+        let reportePacientes = document.getElementById("reportePacientes");
+        let reporteMedicinas = document.getElementById("reporteMedicinas");
+        //generar
+        getDoctores();
+        getEnfermeras();
+        getPacientes();
+        getMedicinas();
+
+        function getDoctores() {
+            let doctorsCounter = 1;
+            fetch("https://uhospital0.herokuapp.com/doctor")
+                .then((response) => response.json())
+                .then((data) => {
+                    doctores.innerHTML = " ";
+                    data.forEach((doctor) => {
+                        let row = document.createElement("tr");
+                        row.id = doctor.first_name;
+                        let doctorsQuantity = document.createElement("td");
+                        doctorsQuantity.innerText = doctorsCounter;
+                        doctorsCounter++;
+                        let doctorName = document.createElement("td");
+                        doctorName.innerText = doctor.first_name;
+                        let doctorLastName = document.createElement("td");
+                        doctorLastName.innerText = doctor.last_name;
+                        let doctorSpeciality = document.createElement("td");
+                        doctorSpeciality.innerText = doctor.speciality;
+                        let doctorButtons = document.createElement("td");
+                        //params
+                        let params = `first_name=${doctor.first_name}`;
+                        params += `&last_name=${doctor.last_name}`;
+                        params += `&date=${doctor.date}`;
+                        params += `&gender=${doctor.gender}`;
+                        params += `&nickname=${doctor.nickname}`;
+                        params += `&password=${doctor.password}`;
+                        params += `&speciality=${doctor.speciality}`;
+                        params += `&phone=${doctor.phone}`;
+                        params += `&type=${doctor.type}`;
+                        params += `&page=0`;
+                        let verButton = document.createElement("a");
+                        verButton.className = "tablebutton";
+                        verButton.innerText = "Ver";
+                        verButton.href = "ver doctor.html?" + params;
+                        let modificarButton = document.createElement("a");
+                        modificarButton.className = "tablebutton";
+                        modificarButton.innerText = "Modificar";
+                        modificarButton.href = "modificar perfil doctor.html?" + params;
+                        let eliminarButton = document.createElement("BUTTON");
+                        eliminarButton.className = "tablebutton";
+                        eliminarButton.innerText = "Eliminar";
+                        eliminarButton.addEventListener("click", () => {
+                            fetch("https://uhospital0.herokuapp.com/doctor?nickname=" + doctor.nickname, {
+                                method: "DELETE",
+                            })
+                                .then((response) => response.json())
+                                .then((data) => getDoctores())
+                                .catch((error) => console.error(error));
+                        });
+                        doctorButtons.append(verButton);
+                        doctorButtons.append(modificarButton);
+                        doctorButtons.append(eliminarButton);
+                        row.appendChild(doctorsQuantity);
+                        row.appendChild(doctorName);
+                        row.appendChild(doctorLastName);
+                        row.appendChild(doctorSpeciality);
+                        row.appendChild(doctorButtons);
+                        doctores.appendChild(row);
+                    });
+                })
+                .catch((error) => console.error(error));
+        }
+
+        function getEnfermeras() {
+            let nursesCounter = 1;
+            fetch("https://uhospital0.herokuapp.com/nurse")
+                .then((response) => response.json())
+                .then((data) => {
+                    enfermeras.innerHTML = " ";
+                    data.forEach((nurse) => {
+                        let row = document.createElement("tr");
+                        row.id = nurse.first_name;
+                        let nursesQuantity = document.createElement("td");
+                        nursesQuantity.innerText = nursesCounter;
+                        nursesCounter++;
+                        let nurseName = document.createElement("td");
+                        nurseName.innerText = nurse.first_name;
+                        let nurseLastName = document.createElement("td");
+                        nurseLastName.innerText = nurse.last_name;
+                        let nurseButtons = document.createElement("td");
+                        //params
+                        let params = `first_name=${nurse.first_name}`;
+                        params += `&last_name=${nurse.last_name}`;
+                        params += `&date=${nurse.date}`;
+                        params += `&gender=${nurse.gender}`;
+                        params += `&nickname=${nurse.nickname}`;
+                        params += `&password=${nurse.password}`;
+                        params += `&phone=${nurse.phone}`;
+                        params += `&type=${nurse.type}`;
+                        params += `&page=0`;
+                        let verButton = document.createElement("a");
+                        verButton.className = "tablebutton";
+                        verButton.innerText = "Ver";
+                        verButton.href = "ver.html?" + params;
+                        let modificarButton = document.createElement("a");
+                        modificarButton.className = "tablebutton";
+                        modificarButton.innerText = "Modificar";
+                        modificarButton.href = "modificar perfil nurse.html?" + params;
+                        let eliminarButton = document.createElement("BUTTON");
+                        eliminarButton.className = "tablebutton";
+                        eliminarButton.innerText = "Eliminar";
+                        eliminarButton.addEventListener("click", () => {
+                            fetch("https://uhospital0.herokuapp.com/nurse?nickname=" + nurse.nickname, {
+                                method: "DELETE",
+                            })
+                                .then((response) => response.json())
+                                .then((data) => getEnfermeras())
+                                .catch((error) => console.error(error));
+                        });
+                        nurseButtons.append(verButton);
+                        nurseButtons.append(modificarButton);
+                        nurseButtons.append(eliminarButton);
+                        row.appendChild(nursesQuantity);
+                        row.appendChild(nurseName);
+                        row.appendChild(nurseLastName);
+                        row.appendChild(nurseButtons);
+                        enfermeras.appendChild(row);
+                    });
+                })
+                .catch((error) => console.error(error));
+        }
+
+
+        function getPacientes() {
+            let pacientesCounter = 1;
+            fetch("https://uhospital0.herokuapp.com/patient")
+                .then((response) => response.json())
+                .then((data) => {
+                    pacientes.innerHTML = " ";
+                    data.forEach((patient) => {
+                        let row = document.createElement("tr");
+                        row.id = patient.first_name;
+                        let patientQuantity = document.createElement("td");
+                        patientQuantity.innerText = pacientesCounter;
+                        pacientesCounter++;
+                        let patientName = document.createElement("td");
+                        patientName.innerText = patient.first_name;
+                        let patientLastName = document.createElement("td");
+                        patientLastName.innerText = patient.last_name;
+                        let patientButtons = document.createElement("td");
+                        //params
+                        let params = `first_name=${patient.first_name}`;
+                        params += `&last_name=${patient.last_name}`;
+                        params += `&date=${patient.date}`;
+                        params += `&gender=${patient.gender}`;
+                        params += `&nickname=${patient.nickname}`;
+                        params += `&password=${patient.password}`;
+                        params += `&phone=${patient.phone}`;
+                        params += `&type=${patient.type}`;
+                        params += "&page=0";
+                        let verButton = document.createElement("a");
+                        verButton.className = "tablebutton";
+                        verButton.innerText = "Ver";
+                        verButton.href = "ver.html?" + params;
+                        let modificarButton = document.createElement("a");
+                        modificarButton.className = "tablebutton";
+                        modificarButton.innerText = "Modificar";
+                        modificarButton.href = "modificar perfil patient.html?" + params;
+                        let eliminarButton = document.createElement("BUTTON");
+                        eliminarButton.className = "tablebutton";
+                        eliminarButton.innerText = "Eliminar";
+                        eliminarButton.addEventListener("click", () => {
+                            fetch("https://uhospital0.herokuapp.com/patient?nickname=" + patient.nickname, {
+                                method: "DELETE",
+                            })
+                                .then((response) => response.json())
+                                .then((data) => getPacientes())
+                                .catch((error) => console.error(error));
+                        });
+                        patientButtons.append(verButton);
+                        patientButtons.append(modificarButton);
+                        patientButtons.append(eliminarButton);
+                        row.appendChild(patientQuantity);
+                        row.appendChild(patientName);
+                        row.appendChild(patientLastName);
+                        row.appendChild(patientButtons);
+                        pacientes.appendChild(row);
+                    });
+                })
+                .catch((error) => console.error(error));
+        }
+
+        function getMedicinas() {
+            let medicinasCounter = 1;
+            fetch("https://uhospital0.herokuapp.com/medicine")
+                .then((response) => response.json())
+                .then((data) => {
+                    medicinas.innerHTML = " ";
+                    data.forEach((medicine) => {
+                        let row = document.createElement("tr");
+                        row.id = medicine.name;
+                        let medicinesQuantity = document.createElement("td");
+                        medicinesQuantity.innerText = medicinasCounter;
+                        medicinasCounter++;
+                        let medicineName = document.createElement("td");
+                        medicineName.innerText = medicine.name;
+                        let medicinePrice = document.createElement("td");
+                        medicinePrice.innerText = "Q"+medicine.price;
+                        let medicineDescription = document.createElement("td");
+                        medicineDescription.innerText = medicine.description;
+                        let medicineQuantity = document.createElement("td");
+                        medicineQuantity.innerText = medicine.quantity;
+                        let medicineButtons = document.createElement("td");
+                        //params
+                        let params = `name=${medicine.name}`;
+                        params += `&price=${medicine.price}`;
+                        params += `&description=${medicine.description}`;
+                        params += `&quantity=${medicine.quantity}`;
+                        let verButton = document.createElement("a");
+                        verButton.className = "tablebutton";
+                        verButton.innerText = "Ver";
+                        verButton.href = "ver medicina.html?" + params;
+                        let modificarButton = document.createElement("a");
+                        modificarButton.className = "tablebutton";
+                        modificarButton.innerText = "Modificar";
+                        modificarButton.href = "modificar medicina.html?" + params;
+                        let eliminarButton = document.createElement("BUTTON");
+                        eliminarButton.className = "tablebutton";
+                        eliminarButton.innerText = "Eliminar";
+                        eliminarButton.addEventListener("click", () => {
+                            fetch("https://uhospital0.herokuapp.com/medicine?name=" + medicine.name, {
+                                method: "DELETE",
+                            })
+                                .then((response) => response.json())
+                                .then((data) => getMedicinas())
+                                .catch((error) => console.error(error));
+                        });
+                        medicineButtons.append(verButton);
+                        medicineButtons.append(modificarButton);
+                        medicineButtons.append(eliminarButton);
+                        row.appendChild(medicinesQuantity);
+                        row.appendChild(medicineName);
+                        row.appendChild(medicinePrice);
+                        row.appendChild(medicineDescription);
+                        row.appendChild(medicineQuantity);
+                        row.appendChild(medicineButtons);
+                        medicinas.appendChild(row);
+                    });
+                })
+                .catch((error) => console.error(error));
+        }
+
+        reporteDoctores.addEventListener("click", () => {
+            window.open("https://uhospital0.herokuapp.com/reports/doctors");
+        });
+        reporteEnfermeras.addEventListener("click", () => {
+            window.open("https://uhospital0.herokuapp.com/reports/nurses");
+        });
+        reportePacientes.addEventListener("click", () => {
+            window.open("https://uhospital0.herokuapp.com/reports/patients");
+        });
+        reporteMedicinas.addEventListener("click", () => {
+            window.open("https://uhospital0.herokuapp.com/reports/medicine");
+        });
+    </script>
+</body>
+
+</html>

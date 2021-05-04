@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Paciente Dashboard | UHospital</title>
+    </head>
+    <div class="black form" id="dashboardForm">
+        <h1>Dashboard Paciente</h1>
+        <p id="currentUser"></p>
+        <br>
+        <a class="abutton largebutton buttonblack" id="solicitarCita">Solicitar Cita</a>
+        <br><br>
+        <a class="abutton largebutton buttonblack" id="verCitas">Ver Citas</a>
+        <br><br>
+        <a href="comprar medicina.html" class="abutton largebutton buttonblack">Comprar Medicina</a>
+        <br><br>
+        <a class="abutton largebutton buttonblack" id="modificarButton">Modificar Perfil</a>
+    </div>
+    <script>
+        let dashboardForm = document.getElementById("dashboardForm");
+        //getting URL parameters
+        const queryStrings = window.location.search;
+        const urlParams = new URLSearchParams(queryStrings);
+        const firstName = urlParams.get("first_name");
+        const lastName = urlParams.get("last_name");
+        const date = urlParams.get("date")
+        const gender = urlParams.get("gender")
+        const nickname = urlParams.get("nickname")
+        const password = urlParams.get("password")
+        const phone = urlParams.get("phone")
+        const type = urlParams.get("type")
+        let params ="first_name="+firstName;
+        params += "&last_name=" + lastName;
+        params += "&date=" + date;
+        params += "&gender=" + gender;
+        params += "&nickname=" + nickname;
+        params += "&password=" + password;
+        params += "&phone=" + phone;
+        params += "&type=" + type;
+        params += "&page=1";
+        let modificarButton = document.getElementById("modificarButton");
+        dashboardForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+        modificarButton.addEventListener("click", (e) => {
+            modificarButton.href = "modificar perfil patient.html?" + params;
+        })
+        solicitarCita.addEventListener("click", (e)=> {
+            solicitarCita.href = "solicitar cita.html?patient=" + nickname;
+        })
+        verCitas.addEventListener("click", (e) => {
+            verCitas.href = "ver citas.html?patient=" + nickname;
+        })
+        //getting inputs
+        let currentUser = document.getElementById("currentUser");
+        if (gender == "F" || gender == "f") {
+            currentUser.innerText = `¡Bienvenida, ${firstName} ${lastName}!`;
+        } else {
+            currentUser.innerText = `¡Bienvenido, ${firstName} ${lastName}!`;
+        }
+    </script>
+</body>
+
+</html>

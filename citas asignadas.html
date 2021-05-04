@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Citas Asignadas | UHospital</title>
+    </head>
+    <div class="black">
+        <h1>Citas Asignadas</h1>
+        <table style="border: none;">
+            <th style="border: none;">
+                <tr class="tableheader tableempty">
+                    <td class=" tableempty ">Fecha</td>
+                    <td class="tableempty ">Hora</td>
+                    <td class="tableempty ">Motivo</td>
+                    <td class="tableempty">Completada</td>
+                </tr>
+            </th>
+            <tbody class="tableempty" id="citas">
+                <tr class="tableempty ">
+                    <td class="tableempty ">Fecha: asdfasdfadsf</td>
+                    <td class="tableempty ">Hora: asdfasdfadsf</td>
+                    <td class="tableempty">Motivo: asdfasdfadsf</td>
+                    <td class="tableempty"><input type="checkbox" aria-label="cita completada"> </td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    let citas = document.getElementById("citas");
+    //URL parameters
+    const queryStrings = window.location.search;
+    const urlParams = new URLSearchParams(queryStrings);
+    const doctorActual = urlParams.get("doctor");
+    //generar
+    getCitas();
+
+    function getCitas() {
+        fetch("https://uhospital0.herokuapp.com/appointment")
+            .then((response) => response.json())
+            .then((data) => {
+                citas.innerHTML = " ";
+                data.forEach((appointment) => {
+                    if (appointment.doctor == doctorActual && appointment.status == "Aceptada") {
+                        let row = document.createElement("tr");
+                        row.className = "tableempty center";
+                        let date = document.createElement("td");
+                        date.className = "tableempty"
+                        date.innerText = appointment.date;
+                        let time = document.createElement("td");
+                        time.className = "tableempty";
+                        time.innerText = appointment.time;
+                        let description = document.createElement("td");
+                        description.innerText = appointment.description;
+                        description.className = "tableempty";
+                        let completar = document.createElement("td");
+                        completar.className = "tableempty";
+                        let completarCheck = document.createElement("input");
+                        completarCheck.type = "checkbox";
+                        completarCheck.addEventListener("change", () => {
+                            let values;
+                            if (completarCheck.checked) {
+                                values = {
+                                    patient: appointment.patient,
+                                    status: "Completada",
+                                    doctor: doctorActual
+                                };
+                            } else {
+                                values = {
+                                    patient: appointment.patient,
+                                    status: "Aceptada",
+                                    doctor: doctorActual
+                                };
+                            }
+                            console.log(values);
+                            fetch("https://uhospital0.herokuapp.com/appointment", {
+                                method: "PUT",
+                                headers: {
+                                    "content-type": "application/json",
+                                },
+                                body: JSON.stringify(values),
+                            })
+                                .then((response) => response.json())
+                                .catch((error) => {
+                                    console.error(error);
+                                    return false;
+                                })
+                        })
+                        row.append(date);
+                        row.append(time);
+                        row.append(description);
+                        completar.append(completarCheck);
+                        row.append(completar);
+                        citas.append(row);
+                    }
+                });
+            })
+            .catch((error) => console.error(error));
+    }
+</script>
+
+</html>
